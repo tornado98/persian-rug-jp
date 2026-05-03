@@ -22,3 +22,18 @@
   --color-accent-light: #c4a36a;
   --color-accent-dark: #2a2a2a;
 }
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+  opacity: 0; /* initially hidden */
+}

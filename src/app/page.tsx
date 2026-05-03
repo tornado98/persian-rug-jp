@@ -1,65 +1,92 @@
+// src/app/page.tsx
 import Image from "next/image";
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import type { Product } from "@prisma/client";
+import ProductCard from "@/components/ProductCard";
 
-export default function Home() {
+export default async function HomePage() {
+  // Fetch featured products (latest 6 in stock)
+  const featuredProducts: Product[] = await prisma.product.findMany({
+    where: { inStock: true },
+    orderBy: { createdAt: "desc" },
+    take: 6,
+  });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <>
+      {/* ========== HERO SECTION ========== */}
+      <section className="relative w-full h-[70vh] min-h-[500px] overflow-hidden">
         <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="https://images.unsplash.com/photo-1600166898405-da9535204843?auto=format&fit=crop&w=1920&q=80"
+          alt="Persian handwoven rug"
+          fill
+          className="object-cover brightness-[0.35]"
           priority
+          unoptimized
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary-50 drop-shadow-lg animate-fade-in">
+            手織りの芸術
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="mt-4 text-lg md:text-2xl text-primary-100 max-w-2xl drop-shadow">
+            イランから直輸入した最高級ペルシャ絨毯を、
+            <br className="hidden sm:block" />
+            あなたの暮らしに。
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="#featured"
+            className="mt-8 inline-block bg-primary-600 hover:bg-primary-700 text-white px-8 py-4 rounded-full text-lg font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            コレクションを見る
+          </Link>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* ========== FEATURED PRODUCTS ========== */}
+      <section id="featured" className="max-w-7xl mx-auto px-4 py-20">
+        <h2 className="text-3xl md:text-4xl font-bold text-primary-800 text-center mb-12 tracking-wide">
+          おすすめ商品
+        </h2>
+
+        {featuredProducts.length === 0 ? (
+          <p className="text-center text-primary-600">
+            現在、商品はありません。
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
+
+        <div className="mt-12 text-center">
+          <Link
+            href="/products"
+            className="inline-block border-2 border-primary-600 text-primary-700 hover:bg-primary-600 hover:text-white px-8 py-3 rounded-full font-medium transition-colors duration-300"
+          >
+            すべての商品を見る
+          </Link>
+        </div>
+      </section>
+
+      {/* ========== BRAND STORY ========== */}
+      <section className="bg-primary-100 py-20">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary-800 mb-6">
+            私たちの物語
+          </h2>
+          <p className="text-primary-700 leading-relaxed md:text-lg">
+            一枚一枚の絨毯には、イランの伝統と織り手の魂が込められています。
+            <br className="hidden sm:block" />
+            最高級の天然素材を用い、熟練の職人が数ヶ月かけて織り上げたペルシャ絨毯は、
+            <br className="hidden sm:block" />
+            時を経るほどに味わいを増し、あなたの空間を唯一無二のものにします。
+          </p>
+          <p className="mt-8 text-primary-800 font-medium">— Persian Rug JP</p>
+        </div>
+      </section>
+    </>
   );
 }
