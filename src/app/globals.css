@@ -1,26 +1,24 @@
+/* Import Tailwind's base styles */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Custom theme for Persian rug shop in Japan */
+@theme {
+  /* Font family using CSS variable from Next.js font */
+  --font-sans: var(--font-noto-sans-jp), sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Primary palette – warm earth tones inspired by Persian rugs */
+  --color-primary-50: #f9f7f2;
+  --color-primary-100: #f1ede0;
+  --color-primary-200: #e2d6bc;
+  --color-primary-300: #cfb88f;
+  --color-primary-400: #b8935a;
+  --color-primary-500: #a67c46;
+  --color-primary-600: #8b633c;
+  --color-primary-700: #704e33;
+  --color-primary-800: #5e422f;
+  --color-primary-900: #50382a;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Accent colors for subtle highlights */
+  --color-accent-light: #c4a36a;
+  --color-accent-dark: #2a2a2a;
 }
