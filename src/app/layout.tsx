@@ -5,7 +5,7 @@ import "./globals.css";
 // Load Japanese font with specific weights and swap strategy
 const notoSansJP = Noto_Sans_JP({
   weight: ["400", "500", "700"],
-  subsets: ["latin", "japanese"],
+  subsets: ["latin"],
   variable: "--font-noto-sans-jp", // Maps to the CSS variable we defined
   display: "swap",
 });
